@@ -1,11 +1,14 @@
 package com.Eventify.Eventify.controller;
 
+import com.Eventify.Eventify.Entity.CustomUserDetails;
 import com.Eventify.Eventify.Entity.User;
 import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.UserRepository;
 import com.Eventify.Eventify.service.EventService;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,7 +30,8 @@ public class OrganizerController {
 
     @PostMapping("/events")
     public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
-         User res=userRepo.findByEmail("test@gmail.com").orElseThrow(() -> new  UserNotFoundException("User no found"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails res = (CustomUserDetails) auth.getPrincipal();
         Long userId = res.getId();
         LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"));
         OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);
