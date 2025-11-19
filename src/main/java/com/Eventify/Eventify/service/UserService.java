@@ -3,6 +3,7 @@ package com.Eventify.Eventify.service;
 
 import com.Eventify.Eventify.Entity.User;
 import com.Eventify.Eventify.exception.UserNotFoundException;
+import com.Eventify.Eventify.exception.UsernameAlreadyExistsException;
 import com.Eventify.Eventify.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class UserService {
     }
 
     public User createUser(String name, String email, String password){
+        if (repo.findByEmail(email).isPresent())
+            throw new UsernameAlreadyExistsException("Email '" + email + "' already exist");
         User u = new User();
         u.setName(name);
         u.setEmail(email);
