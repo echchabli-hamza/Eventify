@@ -4,6 +4,7 @@ package com.Eventify.Eventify.Entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
@@ -29,4 +30,8 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public void setPassword(String password) {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }
