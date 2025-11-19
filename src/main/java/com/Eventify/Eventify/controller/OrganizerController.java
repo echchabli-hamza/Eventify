@@ -1,6 +1,7 @@
 package com.Eventify.Eventify.controller;
 
 import com.Eventify.Eventify.Entity.User;
+import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.UserRepository;
 import com.Eventify.Eventify.service.EventService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class OrganizerController {
 
     @PostMapping("/events")
     public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
-         User res=userRepo.findByEmail("test@gmail.com");
+         User res=userRepo.findByEmail("test@gmail.com").orElseThrow(() -> new  UserNotFoundException("User no found"));
         Long userId = res.getId();
         LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"));
         OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);

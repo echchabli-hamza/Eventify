@@ -1,6 +1,7 @@
 package com.Eventify.Eventify.controller;
 
 import com.Eventify.Eventify.Entity.User;
+import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.UserRepository;
 import com.Eventify.Eventify.service.RegistrationService;
 import com.Eventify.Eventify.service.UserService;
@@ -26,13 +27,17 @@ public class UserController {
 
     @PostMapping("/events/{eventId}/register")
     public ResponseEntity<?> register(@PathVariable Long eventId, String email) {
-        Long userId = userRepo.findByEmail(email).getId();
+        Long userId = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"))
+                .getId();
         return ResponseEntity.ok(regService.register(userId, eventId));
     }
 
     @GetMapping("/registrations")
     public ResponseEntity<?> myRegs(String email) {
-        Long userId = userRepo.findByEmail(email).getId();
+        Long userId = userRepo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"))
+                .getId();
         return ResponseEntity.ok(regService.userRegistrations(userId));
     }
 }
