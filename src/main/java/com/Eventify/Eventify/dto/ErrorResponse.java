@@ -1,4 +1,4 @@
-package com.Eventify.Eventify.Entity;
+package com.Eventify.Eventify.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
