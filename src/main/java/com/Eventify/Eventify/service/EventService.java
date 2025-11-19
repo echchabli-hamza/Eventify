@@ -1,5 +1,7 @@
 package com.Eventify.Eventify.service;
 
+import com.Eventify.Eventify.exception.EventNotFoundException;
+import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.*;
 
 import com.Eventify.Eventify.Entity.*;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventService {
@@ -25,7 +26,7 @@ public class EventService {
                              OffsetDateTime date, int capacity, Long organizerId){
 
         User organizer = userRepo.findById(organizerId)
-                .orElseThrow(() -> new RuntimeException("Organizer not found"));
+                .orElseThrow(() -> new UserNotFoundException("Organizer not found"));
 
         Event e = new Event();
         e.setTitle(title);
@@ -38,7 +39,7 @@ public class EventService {
     }
 
     public Event updateEvent(Long id, String title, String desc){
-        Event e = repo.findById(id).orElseThrow();
+        Event e = repo.findById(id).orElseThrow(() -> new EventNotFoundException("Event not found"));
         e.setTitle(title);
         e.setDescription(desc);
         return repo.save(e);

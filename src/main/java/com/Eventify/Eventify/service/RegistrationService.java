@@ -1,6 +1,8 @@
 package com.Eventify.Eventify.service;
 
 import com.Eventify.Eventify.Entity.*;
+import com.Eventify.Eventify.exception.EventNotFoundException;
+import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +26,10 @@ public class RegistrationService {
     public Registration register(Long userId, Long eventId){
 
         User u = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Event e = eventRepo.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         Registration r = new Registration();
         r.setUser(u);
@@ -40,7 +42,7 @@ public class RegistrationService {
 
     public List<Registration> userRegistrations(Long userId){
         User u = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return repo.findByUser(u);
     }

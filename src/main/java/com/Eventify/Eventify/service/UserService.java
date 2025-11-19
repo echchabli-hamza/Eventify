@@ -2,6 +2,7 @@ package com.Eventify.Eventify.service;
 
 
 import com.Eventify.Eventify.Entity.User;
+import com.Eventify.Eventify.exception.UserNotFoundException;
 import com.Eventify.Eventify.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class UserService {
     }
 
     public User updateRole(Long id, String roleName){
-        User u = repo.findById(id).orElseThrow();
+        User u = repo.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
         u.setRole(roleService.get(roleName));
         return repo.save(u);
     }
