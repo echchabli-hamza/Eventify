@@ -10,8 +10,10 @@ import java.util.*;
 @Service
 public class RoleService {
     private final RoleRepository repo;
-    public RoleService(RoleRepository repo){ this.repo = repo; }
 
+    public RoleService(RoleRepository repo){
+        this.repo = repo;
+    }
 
     public Role create(String name){
         Role r = new Role();
@@ -19,9 +21,8 @@ public class RoleService {
         return repo.save(r);
     }
 
-
     public Role get(String name){
-         Optional<Role> res = repo.findByName(name);
-        return res.isPresent() ? res.get() : null  ;
+        return repo.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Role not found: " + name));
     }
 }

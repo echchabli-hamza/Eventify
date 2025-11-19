@@ -1,32 +1,38 @@
 package com.Eventify.Eventify.controller;
 
 import com.Eventify.Eventify.Entity.User;
+import com.Eventify.Eventify.repository.UserRepository;
+import com.Eventify.Eventify.service.RegistrationService;
 import com.Eventify.Eventify.service.UserService;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
-    private final UserService service;
-    public UserController(UserService service){ this.service = service; }
 
+    private final RegistrationService regService;
+    private final UserRepository userRepo;
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Map<String,String> body){
-        User u = service.createUser(body.get("name"), body.get("email"), body.get("password"));
-        return ResponseEntity.ok(u);
+    public UserController(RegistrationService regService, UserRepository userRepo) {
+        this.regService = regService;
+        this.userRepo = userRepo;
     }
 
 
-    @PutMapping("/{id}/role")
-    public ResponseEntity<?> role(@PathVariable Long id, @RequestBody Map<String,String> body){
-        return ResponseEntity.ok(service.updateRole(id, body.get("role")));
+
+    @PostMapping("/events/{eventId}/register")
+    public ResponseEntity<?> register(@PathVariable Long eventId, String email) {
+        Long userId = userRepo.findByEmail(email).getId();
+        return ResponseEntity.ok(regService.register(userId, eventId));
     }
 
-
-    @GetMapping
-    public ResponseEntity<?> all(){ return ResponseEntity.ok(service.all()); }
+    @GetMapping("/registrations")
+    public ResponseEntity<?> myRegs(String email) {
+        Long userId = userRepo.findByEmail(email).getId();
+        return ResponseEntity.ok(regService.userRegistrations(userId));
+    }
 }

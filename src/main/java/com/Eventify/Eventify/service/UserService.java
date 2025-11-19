@@ -9,28 +9,29 @@ import java.util.List;
 
 @Service
 public class UserService {
+
     private final UserRepository repo;
     private final RoleService roleService;
-
 
     public UserService(UserRepository repo, RoleService roleService){
         this.repo = repo;
         this.roleService = roleService;
     }
 
-
     public User createUser(String name, String email, String password){
         User u = new User();
-        u.setUsername(name);
+        u.setName(name);
         u.setEmail(email);
-        u.setPassword(password); // no security now
+        u.setPassword(password);
+
         u.setRole(roleService.get("ROLE_USER"));
+
         return repo.save(u);
     }
 
-
-    public List<User> all(){ return repo.findAll(); }
-
+    public List<User> all(){
+        return repo.findAll();
+    }
 
     public User updateRole(Long id, String roleName){
         User u = repo.findById(id).orElseThrow();

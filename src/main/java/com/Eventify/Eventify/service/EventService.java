@@ -12,32 +12,30 @@ import java.util.Optional;
 
 @Service
 public class EventService {
+
     private final EventRepository repo;
     private final UserRepository userRepo;
-
 
     public EventService(EventRepository repo, UserRepository userRepo){
         this.repo = repo;
         this.userRepo = userRepo;
     }
 
+    public Event createEvent(String title, String desc, String loc,
+                             OffsetDateTime date, int capacity, Long organizerId){
 
-    public Event createEvent(String title, String desc, String loc, OffsetDateTime date, int capacity, Long organizerId){
-        Optional<User> res = userRepo.findById(organizerId);
+        User organizer = userRepo.findById(organizerId)
+                .orElseThrow(() -> new RuntimeException("Organizer not found"));
 
-        if (res.isEmpty()){
-            return null;
-        }
         Event e = new Event();
         e.setTitle(title);
         e.setDescription(desc);
         e.setLocation(loc);
         e.setDateTime(date);
         e.setCapacity(capacity);
-        e.setOrganizer(res.get());
+        e.setOrganizer(organizer);
         return repo.save(e);
     }
-
 
     public Event updateEvent(Long id, String title, String desc){
         Event e = repo.findById(id).orElseThrow();
@@ -46,9 +44,11 @@ public class EventService {
         return repo.save(e);
     }
 
+    public void deleteEvent(Long id){
+        repo.deleteById(id);
+    }
 
-    public void deleteEvent(Long id){ repo.deleteById(id); }
-
-
-    public List<Event> all(){ return repo.findAll(); }
+    public List<Event> all(){
+        return repo.findAll();
+    }
 }
