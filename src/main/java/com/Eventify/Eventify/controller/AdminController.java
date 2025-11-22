@@ -31,8 +31,8 @@ public class AdminController {
         return ResponseEntity.ok(userService.all());
     }
 
-    @PutMapping("/users/{id}/role")
-    public ResponseEntity<?> changeRole(@PathVariable Long id, @RequestBody String role) {
+    @PutMapping("/users/{id}/role/{role}")
+    public ResponseEntity<?> changeRole(@PathVariable("id") Long id, @PathVariable("role") String role) {
         return ResponseEntity.ok(userService.updateRole(id, role));
     }
 
