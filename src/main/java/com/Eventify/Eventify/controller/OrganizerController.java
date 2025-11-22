@@ -28,11 +28,33 @@ public class OrganizerController {
         this.userRepo = userRepo;
     }
 
-    @PostMapping("/events")
-    public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
+//    @PostMapping("/events")
+//    public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        CustomUserDetails res = (CustomUserDetails) auth.getPrincipal();
+//        Long userId = res.getId();
+//        LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"));
+//        OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);
+//
+//
+//        return ResponseEntity.ok(
+//                eventService.createEvent(
+//                        body.get("title"),
+//                        body.get("description"),
+//                        body.get("location"),
+//                       offsetDateTime,
+//                        Integer.parseInt(body.get("capacity")),
+//                        userId
+//                )
+//        );
+//    }
+@PostMapping("/events")
+public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
+    try {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails res = (CustomUserDetails) auth.getPrincipal();
         Long userId = res.getId();
+
         LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"));
         OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);
 
@@ -41,12 +63,17 @@ public class OrganizerController {
                         body.get("title"),
                         body.get("description"),
                         body.get("location"),
-                       offsetDateTime,
+                        offsetDateTime,
                         Integer.parseInt(body.get("capacity")),
                         userId
                 )
         );
+    } catch (Exception e) {
+        e.printStackTrace(); // This will show the actual exception in the console
+        return ResponseEntity.status(500).body(e.getMessage());
     }
+}
+
 
     @PutMapping("/events/{id}")
     public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody Map<String,String> body) {
