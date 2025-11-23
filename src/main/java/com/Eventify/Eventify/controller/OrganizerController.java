@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @RestController
@@ -55,9 +56,11 @@ public ResponseEntity<?> createEvent(@RequestBody Map<String,String> body) {
         CustomUserDetails res = (CustomUserDetails) auth.getPrincipal();
         Long userId = res.getId();
 
-        LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"));
-        OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localDateTime = LocalDateTime.parse(body.get("dateTime"), formatter);
 
+        // convert to OffsetDateTime in UTC
+        OffsetDateTime offsetDateTime = localDateTime.atOffset(ZoneOffset.UTC);
         return ResponseEntity.ok(
                 eventService.createEvent(
                         body.get("title"),
