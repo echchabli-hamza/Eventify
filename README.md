@@ -121,6 +121,3 @@ Format standard des erreurs :
 
 ---
 
-## Auteurs
-
-Projet réalisé en binôme dans un cadre pédagogique.
