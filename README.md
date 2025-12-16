@@ -121,3 +121,5 @@ Format standard des erreurs :
 
 ---
 
+![Diagramme de classes](util/nom_de_l_image.png)
+
