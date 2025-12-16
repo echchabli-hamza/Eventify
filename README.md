@@ -121,5 +121,5 @@ Format standard des erreurs :
 
 ---
 
-![Diagramme de classes](util/nom_de_l_image.png)
+![Diagramme de classes](src/main/java/com/Eventify/Eventify/Util/EncryptionUtil.java/02025-12-16%2015-33-03.png)
 
