@@ -18,7 +18,7 @@ L’application est sécurisée avec **Spring Security (Basic Authentication)** 
 * Spring Security (stateless)
 * Spring Data JPA
 * BCryptPasswordEncoder
-* Base de données relationnelle (H2 / MySQL)
+* Base de données relationnelle (postgres)
 
 ---
 
